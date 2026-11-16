@@ -38,6 +38,73 @@ hold, and a category-mix panel shows where the board's rows sit.
 - Every row carries an 8-step farm plan derived from its category, chains, TVL and age, each
   step with a cost and a time, ending with a planned exit.
 
+## How to read the board
+
+Each row is one pre-token protocol, ranked by implied value. The number is the
+model's estimate of what the protocol would be worth if it launched a token
+today, priced from its own category's live comparables. It is not a prediction
+of the launch price: a launch can list far above or below the implied value,
+and the board never mixes live market caps into the ranking.
+
+Three signals sit next to every implied value, and none of them changes it:
+
+- **Growth vs peers.** The protocol's seven-day TVL change minus the median
+  seven-day change of the live-token protocols in its own category. A positive
+  number means the protocol is outpacing its category; a negative one means it
+  is lagging it. The board tags rows that outpace their peers.
+- **Evidence score (0-100).** How much of the snapshot backs the row: 30 points
+  for a reported seven-day change, 25 for a listed date, up to 25 for the live
+  comparables that priced its category, and 5 to 20 for the TVL tier (5 below
+  $50M, 10 at $50M, 15 at $100M, 20 at $1B). 75 and up is `strong`, 50 to 74 is
+  `fair`, below 50 is `thin`. Thin evidence does not lower the implied value;
+  it says how far to trust it.
+- **Farm totals.** The plan's total capital, gas and hold, so a row can be
+  judged on what it costs to farm, not only on what it might be worth.
+
+The `Where the board points` panel groups the rows by category: the eight
+categories with the most rows, each with its median implied value. Clicking a
+category filters the board to it, so the mix of the board can be read at a
+glance before any single row is opened.
+
+## The farm plan
+
+Every row carries an eight-step farm plan, derived from the protocol's own
+category, chains, TVL and age — never from a hand-written list of names:
+
+1. Start with a fresh wallet that holds only the funds you plan to farm, and
+   keep its seed phrase offline.
+2. Take the category's main action (supply, provide liquidity, bridge, stake,
+   deposit margin, fund a market, deposit into a vault, mint, or deposit).
+3. Take a second, different action on the same protocol, so the wallet shows
+   more than one transaction.
+4. Repeat the position on the protocol's second chain, or, if it runs on one
+   chain only, make one qualifying action each week.
+5. Hold the position for the plan's hold period, so the activity is counted
+   in more than one snapshot.
+6. Before withdrawing, check the protocol's own points or rewards page, and
+   claim only from the link it publishes — never pay anyone to claim for you.
+7. Write the wallet, the dates and every transaction in a farm log.
+8. Plan the exit before you need it: withdraw in two tranches a week apart,
+   and leave a dust position so the wallet stays eligible if a later snapshot
+   counts it.
+
+The plan's capital is sized from the protocol's TVL: $250 above $5B, $150
+above $1B, $100 above $100M, $50 below that; $150 or more of capital costs
+about $8 of gas, less costs about $4. The hold period is longer for younger
+protocols — 60 days if listed less than six months ago, 45 days under a year,
+30 days otherwise — so a young protocol's activity has time to be counted. The
+full playbook, with the reasoning behind each step and a worked example, is in
+`docs/farm-playbook.md`.
+
+## Limits
+
+The radar is a ranking, not a forecast. It cannot see a protocol's tokenomics,
+its vesting, its team, or whether a launch will happen at all — the snapshot
+has none of that. A high implied value on thin evidence is a reason to look
+closer, not a reason to farm more. The farm plan is a procedure for qualifying
+activity, not financial advice, and every step's cost is stated so the reader
+can decide whether the position is worth it.
+
 ## Run it
 
 ```sh
@@ -52,6 +119,7 @@ Node 22+, standard library only, no network. `out/` holds `board.json`, `data.js
 - `main.ts` — entrypoint: reads the snapshot, writes the outputs.
 - `lib/model.ts` — the model, the board, the farm plans, the snapshot parser.
 - `dashboard/` — the static page (index.html, app.css, app.js), no network.
+- `docs/farm-playbook.md` — the reasoning behind the eight-step farm plan, with sizing and a worked example.
 - `screenshots/` — the board, a protocol's detail view, a filtered view.
 - `vendor/makefun-board.ts` — make.fun's dossier library.
 
